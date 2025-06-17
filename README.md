@@ -1,3 +1,29 @@
+# AI Native Journey
+
+This repository contains my journey of learning AI and Python programming. The project includes various examples and exercises to demonstrate fundamental programming concepts.
+
+## Current Features
+
+- Basic control flow examples using if-else statements
+- Weather-based coffee recommendation system
+
+## Getting Started
+
+To run the examples:
+
+1. Make sure you have Python 3 installed
+2. Clone this repository
+3. Run the Python files using: `python3 filename.py`
+
+## Example
+
+```python
+# Running controlflow.py
+python3 controlflow.py
+```
+
+This will demonstrate a simple weather-based coffee recommendation system.
+
 [Your Project Name]
 Table of Contents
 Your Project Name
