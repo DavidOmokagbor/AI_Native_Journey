@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
+# pyright: reportUndefinedVariable=false
 """
 🎓 INTERACTIVE PYTHON LEARNING TOOL 🎓
 A comprehensive tutorial covering all concepts learned in the last 5 days!
 """
 
-import time
+# pylint: disable=invalid-name, missing-function-docstring, import-error, unused-import
+import os
+import sys
 import random
+import time
 
 def print_slow(text, delay=0.03):
     """Print text with a typewriter effect"""

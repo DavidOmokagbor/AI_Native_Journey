@@ -13,38 +13,33 @@
         }
 
         :root {
-            --primary: #2563eb;
-            --primary-dark: #1d4ed8;
-            --secondary: #7c3aed;
-            --accent: #06b6d4;
-            --success: #059669;
-            --error: #dc2626;
-            --warning: #d97706;
-            --text-primary: #111827;
-            --text-secondary: #6b7280;
-            --text-light: #9ca3af;
-            --bg-primary: #ffffff;
-            --bg-secondary: #f9fafb;
-            --bg-tertiary: #f3f4f6;
-            --border: #e5e7eb;
-            --border-light: #f3f4f6;
-            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-            --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-            --radius: 0.5rem;
-            --radius-lg: 0.75rem;
-            --radius-xl: 1rem;
+            --primary: #0ea5e9; /* Sky Blue */
+            --primary-dark: #0284c7;
+            --secondary: #a78bfa; /* Violet */
+            --accent: #f472b6; /* Pink */
+            --success: #22c55e;
+            --error: #ef4444;
+            --warning: #f59e0b;
+            --text-primary: #f8fafc; /* Almost white */
+            --text-secondary: #cbd5e1; /* Lighter gray */
+            --text-light: #94a3b8; /* Gray */
+            --bg-primary: #020617; /* Navy Black */
+            --bg-secondary-trans: rgba(15, 23, 42, 0.6); /* Slate, transparent */
+            --border: rgba(51, 65, 85, 0.5); /* Slate border, transparent */
+            --shadow-glow: 0 0 15px var(--primary), 0 0 30px var(--accent);
+            --radius: 0.75rem;
+            --radius-lg: 1rem;
+            --radius-xl: 1.25rem;
         }
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            background-color: var(--bg-primary);
             color: var(--text-primary);
             line-height: 1.6;
             font-weight: 400;
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
         .container {
@@ -53,23 +48,86 @@
             padding: 2rem;
         }
 
+        .progress-bar-container {
+            width: 100%;
+            background: var(--bg-secondary-trans);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: var(--radius-xl);
+            margin: 2rem auto 1.5rem auto;
+            box-shadow: 0 8px 32px 0 rgba(0,0,0,0.3);
+            border: 1px solid var(--border);
+            height: 1.5rem;
+            overflow: hidden;
+            max-width: 700px;
+        }
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+            transition: width 0.4s cubic-bezier(.4,2,.6,1);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-glow);
+        }
+        .progress-label {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            color: var(--text-light);
+            font-size: 0.95rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            top: 0;
+            left: 0;
+            line-height: 1.5rem;
+            pointer-events: none;
+            text-shadow: 0 2px 8px #000a;
+        }
+
+        /* Aurora Background */
+        .aurora-background {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 140vw;
+            height: 140vh;
+            background: radial-gradient(circle at center, var(--primary) 0%, transparent 40%),
+                        radial-gradient(circle at center, var(--secondary) 0%, transparent 40%),
+                        radial-gradient(circle at center, var(--accent) 0%, transparent 40%);
+            animation: move-aurora 25s ease-in-out infinite;
+            z-index: -1;
+            mix-blend-mode: screen;
+            opacity: 0.2;
+            transform-origin: center center;
+        }
+
+        @keyframes move-aurora {
+            0% { transform: translate(-50%, -50%) rotate(0deg) scale(1); }
+            25% { transform: translate(-50%, -50%) rotate(90deg) scale(1.2); }
+            50% { transform: translate(-50%, -50%) rotate(180deg) scale(0.9); }
+            75% { transform: translate(-50%, -50%) rotate(270deg) scale(1.1); }
+            100% { transform: translate(-50%, -50%) rotate(360deg) scale(1); }
+        }
+
         /* Header */
         .header {
             text-align: center;
-            background: var(--bg-primary);
+            background: var(--bg-secondary-trans);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
             border-radius: var(--radius-xl);
             padding: 3rem 2rem;
             margin-bottom: 2rem;
-            box-shadow: var(--shadow-lg);
-            border: 1px solid var(--border-light);
+            box-shadow: 0 8px 32px 0 rgba(0,0,0,0.3);
         }
 
         .header h1 {
-            font-size: clamp(2rem, 5vw, 3rem);
+            font-size: clamp(2.5rem, 6vw, 4rem);
             font-weight: 800;
             color: var(--text-primary);
             margin-bottom: 1rem;
             letter-spacing: -0.025em;
+            text-shadow: 0 0 10px var(--primary), 0 0 20px var(--accent);
         }
 
         .header p {
@@ -82,18 +140,22 @@
 
         /* Lesson Container */
         .lesson-container {
-            background: var(--bg-primary);
+            background: var(--bg-secondary-trans);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
             border-radius: var(--radius-xl);
             padding: 2rem;
             margin-bottom: 2rem;
-            box-shadow: var(--shadow-lg);
-            border: 1px solid var(--border-light);
+            box-shadow: 0 8px 32px 0 rgba(0,0,0,0.3);
             display: none;
+            transition: all 0.3s ease;
         }
 
         .lesson-container.active {
             display: block;
             animation: fadeInUp 0.5s ease-out;
+            transform: translateY(0);
         }
 
         @keyframes fadeInUp {
@@ -138,8 +200,8 @@
 
         /* Code Block */
         .code-block {
-            background: #1f2937;
-            color: #f9fafb;
+            background: #0f172a; /* Darker slate */
+            color: #e2e8f0;
             padding: 1.5rem;
             border-radius: var(--radius-lg);
             margin: 1.5rem 0;
@@ -147,7 +209,7 @@
             font-size: 0.875rem;
             line-height: 1.6;
             overflow-x: auto;
-            border: 1px solid #374151;
+            border: 1px solid var(--border);
             position: relative;
         }
 
@@ -168,11 +230,16 @@
 
         /* Interactive Section */
         .interactive-section {
-            background: var(--bg-secondary);
+            background: transparent;
             border: 1px solid var(--border);
             border-radius: var(--radius-lg);
             padding: 2rem;
             margin: 2rem 0;
+            transition: background 0.3s ease;
+        }
+
+        .interactive-section:hover {
+            background: rgba(30, 41, 59, 0.3);
         }
 
         .interactive-section h3 {
@@ -199,7 +266,7 @@
         .input-group label {
             display: block;
             font-weight: 500;
-            color: var(--text-primary);
+            color: var(--text-secondary);
             margin-bottom: 0.5rem;
             font-size: 0.875rem;
             text-transform: uppercase;
@@ -214,7 +281,7 @@
             border-radius: var(--radius);
             font-size: 1rem;
             transition: all 0.2s ease;
-            background: var(--bg-primary);
+            background: #0f172a; /* Darker slate */
             color: var(--text-primary);
         }
 
@@ -228,24 +295,25 @@
         /* Buttons */
         .btn {
             background: var(--primary);
-            color: white;
+            color: var(--bg-primary);
             border: none;
             padding: 0.75rem 1.5rem;
             border-radius: var(--radius);
             font-size: 0.875rem;
-            font-weight: 500;
+            font-weight: 600; /* Bolder */
             cursor: pointer;
             transition: all 0.2s ease;
             text-decoration: none;
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
+            box-shadow: 0 0 10px var(--primary);
         }
 
         .btn:hover {
             background: var(--primary-dark);
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-md);
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 0 20px var(--primary), 0 0 30px var(--accent);
         }
 
         .btn:active {
@@ -253,13 +321,16 @@
         }
 
         .btn-secondary {
-            background: var(--bg-secondary);
-            color: var(--text-primary);
+            background: var(--bg-secondary-trans);
+            color: var(--text-secondary);
             border: 1px solid var(--border);
+            box-shadow: none;
         }
 
         .btn-secondary:hover {
-            background: var(--bg-tertiary);
+            background: rgba(30, 41, 59, 0.8);
+            color: var(--text-primary);
+            border-color: var(--primary);
         }
 
         /* Navigation */
@@ -269,7 +340,9 @@
             align-items: center;
             margin: 2rem 0;
             padding: 1.5rem;
-            background: var(--bg-secondary);
+            background: var(--bg-secondary-trans);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border-radius: var(--radius-lg);
             border: 1px solid var(--border);
         }
@@ -284,15 +357,15 @@
         }
 
         .result.success {
-            background: #ecfdf5;
-            color: var(--success);
-            border: 1px solid #a7f3d0;
+            background: #15803d44; /* Green transparent */
+            color: #4ade80;
+            border: 1px solid #22c55e;
         }
 
         .result.error {
-            background: #fef2f2;
-            color: var(--error);
-            border: 1px solid #fecaca;
+            background: #be123c44; /* Red transparent */
+            color: #f87171;
+            border: 1px solid #ef4444;
         }
 
         /* Lesson Grid */
@@ -304,7 +377,9 @@
         }
 
         .lesson-card {
-            background: var(--bg-primary);
+            background: var(--bg-secondary-trans);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border: 1px solid var(--border);
             border-radius: var(--radius-lg);
             padding: 1.5rem;
@@ -315,8 +390,8 @@
         }
 
         .lesson-card:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 0 20px var(--primary), 0 0 30px var(--accent);
             border-color: var(--primary);
         }
 
@@ -333,7 +408,7 @@
         }
 
         .lesson-card.completed {
-            background: #ecfdf5;
+            background: #15803d44;
             border-color: var(--success);
         }
 
@@ -366,7 +441,9 @@
         }
 
         .menu-option {
-            background: var(--bg-primary);
+            background: var(--bg-secondary-trans);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border: 1px solid var(--border);
             padding: 1rem;
             border-radius: var(--radius);
@@ -377,7 +454,7 @@
         }
 
         .menu-option:hover {
-            background: var(--bg-secondary);
+            background: rgba(30, 41, 59, 0.8);
             border-color: var(--primary);
             transform: translateY(-1px);
         }
@@ -399,6 +476,136 @@
             margin-top: 1rem;
         }
 
+        /* Achievement System */
+        .achievement-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, var(--bg-secondary-trans) 0%, var(--bg-secondary-trans) 100%);
+            border: 2px solid var(--primary);
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+            text-align: center;
+            z-index: 1000;
+            box-shadow: 0 0 30px var(--primary), 0 0 60px var(--accent);
+            animation: achievementPop 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            max-width: 400px;
+            width: 90%;
+        }
+
+        @keyframes achievementPop {
+            0% { transform: translate(-50%, -50%) scale(0.3); opacity: 0; }
+            50% { transform: translate(-50%, -50%) scale(1.1); }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+
+        .trophy-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: trophyGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes trophyGlow {
+            from { text-shadow: 0 0 10px var(--primary), 0 0 20px var(--primary); }
+            to { text-shadow: 0 0 20px var(--primary), 0 0 30px var(--primary), 0 0 40px var(--accent); }
+        }
+
+        .achievement-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 10px var(--primary);
+        }
+
+        .achievement-desc {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .xp-reward {
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--bg-primary);
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .close-achievement {
+            background: var(--primary);
+            color: var(--bg-primary);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .close-achievement:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* Confetti Animation */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: var(--primary);
+            animation: confettiFall 3s linear forwards;
+            z-index: 999;
+        }
+
+        @keyframes confettiFall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* XP Display */
+        .xp-display {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            background: var(--bg-secondary-trans);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 0.75rem 1rem;
+            color: var(--text-primary);
+            font-weight: 600;
+            z-index: 100;
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        .xp-display .xp-icon {
+            color: var(--primary);
+            margin-right: 0.5rem;
+        }
+
+        /* Level Badge */
+        .level-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--bg-primary);
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--radius);
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-left: 0.5rem;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .container {
@@ -416,6 +623,13 @@
             
             .lesson-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .xp-display {
+                top: 0.5rem;
+                right: 0.5rem;
+                font-size: 0.875rem;
+                padding: 0.5rem 0.75rem;
             }
         }
 
@@ -436,7 +650,43 @@
     </style>
 </head>
 <body>
+    <div class="aurora-background"></div>
+
+    <div class="xp-display">
+        <span class="xp-icon">⭐</span>
+        <span id="xp-amount">0</span> XP
+    </div>
+    
+    <!-- Audio Elements for Sound Effects -->
+    <!-- 
+    To add your own sounds:
+    1. Create a 'sounds' folder in your project
+    2. Add these sound files:
+       - victory-sound.mp3 (or .wav) - for lesson completion
+       - applause-sound.mp3 (or .wav) - for celebrations  
+       - level-up-sound.mp3 (or .wav) - for leveling up
+    3. Update the src paths below to point to your sound files
+    -->
+    <audio id="victory-sound" preload="auto">
+        <source src="sounds/victory-sound.mp3" type="audio/mpeg">
+        <source src="sounds/victory-sound.wav" type="audio/wav">
+    </audio>
+    
+    <audio id="applause-sound" preload="auto">
+        <source src="sounds/applause-sound.mp3" type="audio/mpeg">
+        <source src="sounds/applause-sound.wav" type="audio/wav">
+    </audio>
+    
+    <audio id="level-up-sound" preload="auto">
+        <source src="sounds/level-up-sound.mp3" type="audio/mpeg">
+        <source src="sounds/level-up-sound.wav" type="audio/wav">
+    </audio>
+    
     <div class="container">
+        <div class="progress-bar-container" style="position:relative;">
+            <div class="progress-bar" id="progress-bar" style="width:0%"></div>
+            <div class="progress-label" id="progress-label">0 / 8 Lessons Complete</div>
+        </div>
         <!-- Welcome Screen -->
         <div id="welcome-screen" class="lesson-container active">
             <div class="header">
@@ -814,11 +1064,122 @@ except ValueError:
             age: '',
             favorites: []
         };
+        let completedLessons = Array(8).fill(false);
+        let totalXP = 0;
+        let userLevel = 1;
+
+        const achievements = [
+            { id: 1, title: "First Steps", desc: "Completed your first lesson!", xp: 50, icon: "🥇" },
+            { id: 2, title: "Input Master", desc: "Learned user input and interaction!", xp: 75, icon: "💬" },
+            { id: 3, title: "Decision Maker", desc: "Mastered control flow!", xp: 100, icon: "🎯" },
+            { id: 4, title: "Function Wizard", desc: "Created your first functions!", xp: 125, icon: "⚙️" },
+            { id: 5, title: "Loop Master", desc: "Conquered loops and repetition!", xp: 150, icon: "🔄" },
+            { id: 6, title: "Data Architect", desc: "Built with data structures!", xp: 175, icon: "📊" },
+            { id: 7, title: "Error Handler", desc: "Learned to handle errors gracefully!", xp: 200, icon: "🛡️" },
+            { id: 8, title: "Python Master", desc: "Completed the full course!", xp: 500, icon: "👑" }
+        ];
+
+        // Sound playing functions
+        function playSound(soundId) {
+            try {
+                const audio = document.getElementById(soundId);
+                if (audio) {
+                    audio.currentTime = 0; // Reset to beginning
+                    audio.play().catch(e => console.log('Audio play failed:', e));
+                }
+            } catch (error) {
+                console.log('Sound play error:', error);
+            }
+        }
+
+        function playVictorySound() {
+            playSound('victory-sound');
+        }
+
+        function playApplauseSound() {
+            playSound('applause-sound');
+        }
+
+        function playLevelUpSound() {
+            playSound('level-up-sound');
+        }
+
+        function createConfetti() {
+            const colors = ['#0ea5e9', '#a78bfa', '#f472b6', '#22c55e', '#f59e0b'];
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDelay = Math.random() * 2 + 's';
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => {
+                    confetti.remove();
+                }, 3000);
+            }
+        }
+
+        function showAchievement(lessonIndex) {
+            if (lessonIndex < 0 || lessonIndex >= achievements.length) return;
+            
+            const achievement = achievements[lessonIndex];
+            const previousLevel = userLevel;
+            totalXP += achievement.xp;
+            userLevel = Math.floor(totalXP / 100) + 1;
+            
+            updateXPDisplay();
+            createConfetti();
+            
+            // Play appropriate sounds
+            if (lessonIndex === 7) { // Final achievement
+                playVictorySound();
+                setTimeout(() => playApplauseSound(), 1000);
+            } else if (userLevel > previousLevel) { // Level up
+                playLevelUpSound();
+                setTimeout(() => playApplauseSound(), 800);
+            } else { // Regular achievement
+                playVictorySound();
+            }
+            
+            const popup = document.createElement('div');
+            popup.className = 'achievement-popup';
+            popup.innerHTML = `
+                <div class="trophy-icon">${achievement.icon}</div>
+                <div class="achievement-title">${achievement.title}</div>
+                <div class="achievement-desc">${achievement.desc}</div>
+                <div class="xp-reward">+${achievement.xp} XP</div>
+                <div class="level-badge">Level ${userLevel}</div>
+                <br>
+                <button class="close-achievement" onclick="this.parentElement.remove()">Continue Learning!</button>
+            `;
+            
+            document.body.appendChild(popup);
+            
+            setTimeout(() => {
+                if (popup.parentElement) {
+                    popup.remove();
+                }
+            }, 5000);
+        }
+
+        function updateXPDisplay() {
+            document.getElementById('xp-amount').textContent = totalXP;
+        }
+
+        function updateProgressBar() {
+            const total = 8;
+            const completed = completedLessons.filter(Boolean).length;
+            const percent = (completed / total) * 100;
+            document.getElementById('progress-bar').style.width = percent + '%';
+            document.getElementById('progress-label').textContent = `${completed} / ${total} Lessons Complete`;
+        }
 
         function showWelcome() {
             hideAllLessons();
             document.getElementById('welcome-screen').classList.add('active');
             currentLesson = 0;
+            updateProgressBar();
         }
 
         function showLesson(lessonNumber) {
@@ -826,12 +1187,15 @@ except ValueError:
             document.getElementById(`lesson-${lessonNumber}`).classList.add('active');
             currentLesson = lessonNumber;
             markLessonCompleted(lessonNumber - 1);
+            updateProgressBar();
         }
 
         function showFinalProject() {
             hideAllLessons();
             document.getElementById('final-project').classList.add('active');
             currentLesson = 8;
+            markLessonCompleted(7);
+            updateProgressBar();
         }
 
         function hideAllLessons() {
@@ -841,8 +1205,12 @@ except ValueError:
 
         function markLessonCompleted(lessonIndex) {
             const cards = document.querySelectorAll('.lesson-card');
-            if (lessonIndex >= 0 && lessonIndex < cards.length - 1) {
+            if (lessonIndex >= 0 && lessonIndex < cards.length) {
                 cards[lessonIndex].classList.add('completed');
+                if (!completedLessons[lessonIndex]) {
+                    completedLessons[lessonIndex] = true;
+                    showAchievement(lessonIndex);
+                }
             }
         }
 
@@ -1093,6 +1461,8 @@ except ValueError:
 
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
+            updateProgressBar();
+            updateXPDisplay();
             console.log('Python Learning Platform loaded successfully!');
         });
     </script>
