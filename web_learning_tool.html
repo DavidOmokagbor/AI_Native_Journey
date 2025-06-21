@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎓 Interactive Python Learning Tool</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            color: #4a5568;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            color: #718096;
+        }
+
+        .lesson-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: none;
+        }
+
+        .lesson-container.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .lesson-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+        }
+
+        .lesson-header h2 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .content {
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+
+        .interactive-section {
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .interactive-section h3 {
+            color: #4a5568;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .input-group {
+            margin: 15px 0;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #4a5568;
+        }
+
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus, .input-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: transform 0.2s;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .navigation {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .result {
+            background: #c6f6d5;
+            border: 2px solid #68d391;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            display: none;
+        }
+
+        .success {
+            background: #c6f6d5;
+            border-color: #68d391;
+        }
+
+        .error {
+            background: #fed7d7;
+            border-color: #fc8181;
+        }
+
+        .lesson-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .lesson-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .lesson-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .lesson-card h3 {
+            color: #4a5568;
+            margin-bottom: 10px;
+        }
+
+        .lesson-card.completed {
+            background: linear-gradient(135deg, #c6f6d5 0%, #68d391 100%);
+            color: white;
+        }
+
+        .final-project {
+            background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .final-project h2 {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        .menu-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .menu-option {
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            font-size: 1em;
+        }
+
+        .menu-option:hover {
+            transform: translateY(-2px);
+            background: white;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        ul {
+            margin-left: 20px;
+            margin-bottom: 20px;
+        }
+
+        li {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Welcome Screen -->
+        <div id="welcome-screen" class="lesson-container active">
+            <div class="header">
+                <h1>🎓 Interactive Python Learning Tool</h1>
+                <p>A comprehensive tutorial covering all Python concepts for beginners!</p>
+            </div>
+            
+            <div class="content">
+                <p>Welcome to your Python journey! This interactive tool will teach you everything you need to know about Python programming through hands-on exercises and real-world examples.</p>
+                
+                <div class="lesson-list">
+                    <div class="lesson-card" onclick="showLesson(1)">
+                        <h3>📝 Lesson 1</h3>
+                        <p>Variables & Print Statements</p>
+                    </div>
+                    <div class="lesson-card" onclick="showLesson(2)">
+                        <h3>💬 Lesson 2</h3>
+                        <p>Input & User Interaction</p>
+                    </div>
+                    <div class="lesson-card" onclick="showLesson(3)">
+                        <h3>🎯 Lesson 3</h3>
+                        <p>Control Flow (if/else)</p>
+                    </div>
+                    <div class="lesson-card" onclick="showLesson(4)">
+                        <h3>⚙️ Lesson 4</h3>
+                        <p>Functions</p>
+                    </div>
+                    <div class="lesson-card" onclick="showLesson(5)">
+                        <h3>🔄 Lesson 5</h3>
+                        <p>Loops</p>
+                    </div>
+                    <div class="lesson-card" onclick="showLesson(6)">
+                        <h3>📋 Lesson 6</h3>
+                        <p>Lists & Data Structures</p>
+                    </div>
+                    <div class="lesson-card" onclick="showLesson(7)">
+                        <h3>🛡️ Lesson 7</h3>
+                        <p>Error Handling</p>
+                    </div>
+                    <div class="lesson-card" onclick="showFinalProject()">
+                        <h3>🤖 Final Project</h3>
+                        <p>Personal Assistant</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lesson 1: Variables and Print -->
+        <div id="lesson-1" class="lesson-container">
+            <div class="lesson-header">
+                <h2>📝 Lesson 1: Variables & Print Statements</h2>
+            </div>
+            
+            <div class="content">
+                <p>Variables are like containers that store information. Think of them as labeled boxes where you can put things!</p>
+                
+                <div class="code-block">
+name = 'Python Learner'
+age = 25
+favorite_color = 'blue'
+
+print('Hello, ' + name)  # String concatenation
+print(f'You are {age} years old')  # f-strings (modern way)
+print('Your favorite color is', favorite_color)  # Multiple values
+                </div>
+                
+                <div class="interactive-section">
+                    <h3>🎯 Your Turn: Let's Practice!</h3>
+                    <div class="input-group">
+                        <label for="name1">What's your name?</label>
+                        <input type="text" id="name1" placeholder="Enter your name">
+                    </div>
+                    <div class="input-group">
+                        <label for="age1">How old are you?</label>
+                        <input type="number" id="age1" placeholder="Enter your age">
+                    </div>
+                    <div class="input-group">
+                        <label for="color1">What's your favorite color?</label>
+                        <input type="text" id="color1" placeholder="Enter your favorite color">
+                    </div>
+                    <button class="btn" onclick="lesson1Practice()">Run Code</button>
+                    <div id="result1" class="result"></div>
+                </div>
+            </div>
+            
+            <div class="navigation">
+                <button class="btn" onclick="showWelcome()">← Back to Menu</button>
+                <button class="btn" onclick="showLesson(2)">Next Lesson →</button>
+            </div>
+        </div>
+
+        <!-- Lesson 2: Input and Interaction -->
+        <div id="lesson-2" class="lesson-container">
+            <div class="lesson-header">
+                <h2>💬 Lesson 2: Input & User Interaction</h2>
+            </div>
+            
+            <div class="content">
+                <p>The input() function lets us ask questions and get answers from users. Let's build a simple calculator!</p>
+                
+                <div class="code-block">
+user_name = input('What is your name? ')
+print(f'Hello, {user_name}!')
+                </div>
+                
+                <div class="interactive-section">
+                    <h3>🎯 Your Turn: Simple Calculator</h3>
+                    <div class="input-group">
+                        <label for="num1">First number:</label>
+                        <input type="number" id="num1" placeholder="Enter first number">
+                    </div>
+                    <div class="input-group">
+                        <label for="num2">Second number:</label>
+                        <input type="number" id="num2" placeholder="Enter second number">
+                    </div>
+                    <button class="btn" onclick="lesson2Calculator()">Calculate</button>
+                    <div id="result2" class="result"></div>
+                </div>
+            </div>
+            
+            <div class="navigation">
+                <button class="btn" onclick="showLesson(1)">← Previous Lesson</button>
+                <button class="btn" onclick="showLesson(3)">Next Lesson →</button>
+            </div>
+        </div>
+
+        <!-- Lesson 3: Control Flow -->
+        <div id="lesson-3" class="lesson-container">
+            <div class="lesson-header">
+                <h2>🎯 Lesson 3: Control Flow (if/else statements)</h2>
+            </div>
+            
+            <div class="content">
+                <p>Control flow lets your program make decisions! It's like giving your computer a brain to choose what to do.</p>
+                
+                <div class="code-block">
+if temperature > 25:
+    print("It's warm! Let's make an iced coffee!")
+elif temperature > 15:
+    print("Nice weather! A regular coffee sounds good!")
+else:
+    print("It's chilly! Let's make a hot coffee!")
+                </div>
+                
+                <div class="interactive-section">
+                    <h3>🎯 Your Turn: Weather-based Coffee Recommendation</h3>
+                    <div class="input-group">
+                        <label for="temperature">What's the temperature outside?</label>
+                        <input type="number" id="temperature" placeholder="Enter temperature">
+                    </div>
+                    <button class="btn" onclick="lesson3Weather()">Get Recommendation</button>
+                    <div id="result3" class="result"></div>
+                </div>
+            </div>
+            
+            <div class="navigation">
+                <button class="btn" onclick="showLesson(2)">← Previous Lesson</button>
+                <button class="btn" onclick="showLesson(4)">Next Lesson →</button>
+            </div>
+        </div>
+
+        <!-- Lesson 4: Functions -->
+        <div id="lesson-4" class="lesson-container">
+            <div class="lesson-header">
+                <h2>⚙️ Lesson 4: Functions</h2>
+            </div>
+            
+            <div class="content">
+                <p>Functions are like recipes - they package code into reusable blocks! They help you organize your code and avoid repetition.</p>
+                
+                <div class="code-block">
+def greet_person(name, time_of_day="day"):
+    if time_of_day == "morning":
+        return f"Good morning, {name}! ☀️"
+    elif time_of_day == "evening":
+        return f"Good evening, {name}! 🌙"
+    else:
+        return f"Hello, {name}! 👋"
+                </div>
+                
+                <div class="interactive-section">
+                    <h3>🎯 Your Turn: Test the Greeting Function</h3>
+                    <div class="input-group">
+                        <label for="name4">What's your name?</label>
+                        <input type="text" id="name4" placeholder="Enter your name">
+                    </div>
+                    <div class="input-group">
+                        <label for="time4">What time is it?</label>
+                        <select id="time4">
+                            <option value="morning">Morning</option>
+                            <option value="day">Day</option>
+                            <option value="evening">Evening</option>
+                        </select>
+                    </div>
+                    <button class="btn" onclick="lesson4Function()">Get Greeting</button>
+                    <div id="result4" class="result"></div>
+                </div>
+            </div>
+            
+            <div class="navigation">
+                <button class="btn" onclick="showLesson(3)">← Previous Lesson</button>
+                <button class="btn" onclick="showLesson(5)">Next Lesson →</button>
+            </div>
+        </div>
+
+        <!-- Lesson 5: Loops -->
+        <div id="lesson-5" class="lesson-container">
+            <div class="lesson-header">
+                <h2>🔄 Lesson 5: Loops</h2>
+            </div>
+            
+            <div class="content">
+                <p>Loops let you repeat actions without writing the same code over and over! They're like telling your computer: 'Do this until I say stop!'</p>
+                
+                <div class="interactive-section">
+                    <h3>🎯 Your Turn: Count with a For Loop</h3>
+                    <div class="input-group">
+                        <label for="countTo">Count to what number?</label>
+                        <input type="number" id="countTo" placeholder="Enter a number">
+                    </div>
+                    <button class="btn" onclick="lesson5ForLoop()">Start Counting</button>
+                    <div id="result5" class="result"></div>
+                </div>
+                
+                <div class="interactive-section">
+                    <h3>🎯 Your Turn: Number Guessing Game</h3>
+                    <div class="input-group">
+                        <label for="guess">Your guess (1-10):</label>
+                        <input type="number" id="guess" min="1" max="10" placeholder="Enter your guess">
+                    </div>
+                    <button class="btn" onclick="lesson5GuessingGame()">Make Guess</button>
+                    <div id="result5game" class="result"></div>
+                </div>
+            </div>
+            
+            <div class="navigation">
+                <button class="btn" onclick="showLesson(4)">← Previous Lesson</button>
+                <button class="btn" onclick="showLesson(6)">Next Lesson →</button>
+            </div>
+        </div>
+
+        <!-- Lesson 6: Lists -->
+        <div id="lesson-6" class="lesson-container">
+            <div class="lesson-header">
+                <h2>📋 Lesson 6: Lists & Data Structures</h2>
+            </div>
+            
+            <div class="content">
+                <p>Lists are like shopping lists - they hold multiple items! They're perfect for storing collections of data.</p>
+                
+                <div class="code-block">
+fruits = ['apple', 'banana', 'orange']
+print(fruits[0])  # prints 'apple' (first item)
+fruits.append('grape')  # adds 'grape' to the list
+                </div>
+                
+                <div class="interactive-section">
+                    <h3>🎯 Your Turn: Create Your Favorites List</h3>
+                    <div class="input-group">
+                        <label for="favorite1">Favorite thing #1:</label>
+                        <input type="text" id="favorite1" placeholder="Enter your first favorite">
+                    </div>
+                    <div class="input-group">
+                        <label for="favorite2">Favorite thing #2:</label>
+                        <input type="text" id="favorite2" placeholder="Enter your second favorite">
+                    </div>
+                    <div class="input-group">
+                        <label for="favorite3">Favorite thing #3:</label>
+                        <input type="text" id="favorite3" placeholder="Enter your third favorite">
+                    </div>
+                    <button class="btn" onclick="lesson6Lists()">Create List</button>
+                    <div id="result6" class="result"></div>
+                </div>
+            </div>
+            
+            <div class="navigation">
+                <button class="btn" onclick="showLesson(5)">← Previous Lesson</button>
+                <button class="btn" onclick="showLesson(7)">Next Lesson →</button>
+            </div>
+        </div>
+
+        <!-- Lesson 7: Error Handling -->
+        <div id="lesson-7" class="lesson-container">
+            <div class="lesson-header">
+                <h2>🛡️ Lesson 7: Error Handling</h2>
+            </div>
+            
+            <div class="content">
+                <p>Sometimes things go wrong in programs - that's normal! Error handling helps your program deal with problems gracefully.</p>
+                
+                <div class="code-block">
+try:
+    number = int(input("Enter a number: "))
+    print(f"Great! You entered: {number}")
+except ValueError:
+    print("That's not a valid number! Try again.")
+                </div>
+                
+                <div class="interactive-section">
+                    <h3>🎯 Your Turn: Handle Some Errors</h3>
+                    <div class="input-group">
+                        <label for="errorTest">Enter a number (or text to see error handling):</label>
+                        <input type="text" id="errorTest" placeholder="Enter a number or text">
+                    </div>
+                    <button class="btn" onclick="lesson7ErrorHandling()">Test Input</button>
+                    <div id="result7" class="result"></div>
+                </div>
+            </div>
+            
+            <div class="navigation">
+                <button class="btn" onclick="showLesson(6)">← Previous Lesson</button>
+                <button class="btn" onclick="showFinalProject()">Final Project →</button>
+            </div>
+        </div>
+
+        <!-- Final Project -->
+        <div id="final-project" class="lesson-container">
+            <div class="final-project">
+                <h2>🤖 Final Project: Personal Assistant</h2>
+                <p>Congratulations! You've learned so much! Now let's build something amazing using everything you've learned!</p>
+            </div>
+            
+            <div class="content">
+                <p>Let's create a personal assistant that can:</p>
+                <ul>
+                    <li>Remember your name</li>
+                    <li>Calculate things</li>
+                    <li>Give weather-based advice</li>
+                    <li>Play games</li>
+                    <li>Store your favorite things</li>
+                </ul>
+                
+                <div class="interactive-section">
+                    <h3>🤖 Personal Assistant Setup</h3>
+                    <div class="input-group">
+                        <label for="assistantName">What's your name?</label>
+                        <input type="text" id="assistantName" placeholder="Enter your name">
+                    </div>
+                    <div class="input-group">
+                        <label for="assistantAge">How old are you?</label>
+                        <input type="number" id="assistantAge" placeholder="Enter your age">
+                    </div>
+                    <button class="btn" onclick="setupAssistant()">Setup Assistant</button>
+                </div>
+                
+                <div id="assistant-menu" class="hidden">
+                    <h3>What would you like me to do?</h3>
+                    <div class="menu-options">
+                        <button class="menu-option" onclick="assistantCalculator()">🧮 Calculate something</button>
+                        <button class="menu-option" onclick="assistantWeather()">🌤️ Give weather advice</button>
+                        <button class="menu-option" onclick="assistantGame()">🎮 Play a number game</button>
+                        <button class="menu-option" onclick="assistantFavorites()">❤️ Show your favorites</button>
+                        <button class="menu-option" onclick="assistantExit()">👋 Exit</button>
+                    </div>
+                    <div id="assistant-result" class="result"></div>
+                </div>
+            </div>
+            
+            <div class="navigation">
+                <button class="btn" onclick="showLesson(7)">← Previous Lesson</button>
+                <button class="btn" onclick="showWelcome()">Back to Menu</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentLesson = 0;
+        let secretNumber = Math.floor(Math.random() * 10) + 1;
+        let attempts = 0;
+        let assistantData = {
+            name: '',
+            age: '',
+            favorites: []
+        };
+
+        function showWelcome() {
+            hideAllLessons();
+            document.getElementById('welcome-screen').classList.add('active');
+            currentLesson = 0;
+        }
+
+        function showLesson(lessonNumber) {
+            hideAllLessons();
+            document.getElementById(`lesson-${lessonNumber}`).classList.add('active');
+            currentLesson = lessonNumber;
+            markLessonCompleted(lessonNumber - 1);
+        }
+
+        function showFinalProject() {
+            hideAllLessons();
+            document.getElementById('final-project').classList.add('active');
+            currentLesson = 8;
+        }
+
+        function hideAllLessons() {
+            const lessons = document.querySelectorAll('.lesson-container');
+            lessons.forEach(lesson => lesson.classList.remove('active'));
+        }
+
+        function markLessonCompleted(lessonIndex) {
+            const cards = document.querySelectorAll('.lesson-card');
+            if (lessonIndex >= 0 && lessonIndex < cards.length - 1) {
+                cards[lessonIndex].classList.add('completed');
+            }
+        }
+
+        // Lesson 1: Variables and Print
+        function lesson1Practice() {
+            const name = document.getElementById('name1').value;
+            const age = document.getElementById('age1').value;
+            const color = document.getElementById('color1').value;
+            
+            if (name && age && color) {
+                const result = `Hello, ${name}!<br>You are ${age} years old<br>Your favorite color is ${color}`;
+                showResult('result1', result, 'success');
+            } else {
+                showResult('result1', 'Please fill in all fields!', 'error');
+            }
+        }
+
+        // Lesson 2: Calculator
+        function lesson2Calculator() {
+            const num1 = parseFloat(document.getElementById('num1').value);
+            const num2 = parseFloat(document.getElementById('num2').value);
+            
+            if (!isNaN(num1) && !isNaN(num2)) {
+                const result = `
+                    Addition: ${num1} + ${num2} = ${num1 + num2}<br>
+                    Subtraction: ${num1} - ${num2} = ${num1 - num2}<br>
+                    Multiplication: ${num1} × ${num2} = ${num1 * num2}<br>
+                    Division: ${num1} ÷ ${num2} = ${(num1 / num2).toFixed(2)}
+                `;
+                showResult('result2', result, 'success');
+            } else {
+                showResult('result2', 'Please enter valid numbers!', 'error');
+            }
+        }
+
+        // Lesson 3: Weather
+        function lesson3Weather() {
+            const temp = parseInt(document.getElementById('temperature').value);
+            
+            if (!isNaN(temp)) {
+                let recommendation;
+                if (temp > 25) {
+                    recommendation = "☀️ It's warm! Let's make an iced coffee! 🧊";
+                } else if (temp > 15) {
+                    recommendation = "🌤️ Nice weather! A regular coffee sounds good! ☕";
+                } else {
+                    recommendation = "❄️ It's chilly! Let's make a hot coffee! 🔥";
+                }
+                showResult('result3', recommendation, 'success');
+            } else {
+                showResult('result3', 'Please enter a valid temperature!', 'error');
+            }
+        }
+
+        // Lesson 4: Functions
+        function lesson4Function() {
+            const name = document.getElementById('name4').value;
+            const time = document.getElementById('time4').value;
+            
+            if (name) {
+                let greeting;
+                if (time === "morning") {
+                    greeting = `Good morning, ${name}! ☀️`;
+                } else if (time === "evening") {
+                    greeting = `Good evening, ${name}! 🌙`;
+                } else {
+                    greeting = `Hello, ${name}! 👋`;
+                }
+                showResult('result4', greeting, 'success');
+            } else {
+                showResult('result4', 'Please enter your name!', 'error');
+            }
+        }
+
+        // Lesson 5: Loops
+        function lesson5ForLoop() {
+            const countTo = parseInt(document.getElementById('countTo').value);
+            
+            if (!isNaN(countTo) && countTo > 0) {
+                let result = 'Counting...<br>';
+                for (let i = 1; i <= countTo; i++) {
+                    result += `Number ${i}!<br>`;
+                }
+                showResult('result5', result, 'success');
+            } else {
+                showResult('result5', 'Please enter a valid positive number!', 'error');
+            }
+        }
+
+        function lesson5GuessingGame() {
+            const guess = parseInt(document.getElementById('guess').value);
+            attempts++;
+            
+            if (isNaN(guess) || guess < 1 || guess > 10) {
+                showResult('result5game', 'Please enter a number between 1 and 10!', 'error');
+                return;
+            }
+            
+            if (guess === secretNumber) {
+                showResult('result5game', `🎉 Correct! You got it in ${attempts} attempts!`, 'success');
+                secretNumber = Math.floor(Math.random() * 10) + 1;
+                attempts = 0;
+            } else if (guess < secretNumber) {
+                showResult('result5game', '📈 Too low! Try again.', 'error');
+            } else {
+                showResult('result5game', '📉 Too high! Try again.', 'error');
+            }
+        }
+
+        // Lesson 6: Lists
+        function lesson6Lists() {
+            const fav1 = document.getElementById('favorite1').value;
+            const fav2 = document.getElementById('favorite2').value;
+            const fav3 = document.getElementById('favorite3').value;
+            
+            if (fav1 && fav2 && fav3) {
+                const favorites = [fav1, fav2, fav3];
+                const result = `
+                    Your favorites list: [${favorites.join(', ')}]<br>
+                    First favorite: ${favorites[0]}<br>
+                    Last favorite: ${favorites[favorites.length - 1]}<br>
+                    Number of favorites: ${favorites.length}
+                `;
+                showResult('result6', result, 'success');
+            } else {
+                showResult('result6', 'Please fill in all three favorites!', 'error');
+            }
+        }
+
+        // Lesson 7: Error Handling
+        function lesson7ErrorHandling() {
+            const input = document.getElementById('errorTest').value;
+            const number = parseInt(input);
+            
+            if (!isNaN(number)) {
+                showResult('result7', `Great! You entered: ${number}`, 'success');
+            } else {
+                showResult('result7', '❌ That\'s not a valid number! Try again.', 'error');
+            }
+        }
+
+        // Final Project: Personal Assistant
+        function setupAssistant() {
+            const name = document.getElementById('assistantName').value;
+            const age = document.getElementById('assistantAge').value;
+            
+            if (name && age) {
+                assistantData.name = name;
+                assistantData.age = age;
+                assistantData.favorites = ['blue', 'orange', 'yam']; // Default favorites
+                
+                document.getElementById('assistant-menu').classList.remove('hidden');
+                showResult('assistant-result', `🤖 Hello ${name}! I'm your personal assistant!`, 'success');
+            } else {
+                showResult('assistant-result', 'Please fill in both name and age!', 'error');
+            }
+        }
+
+        function assistantCalculator() {
+            const num1 = prompt('First number:');
+            const num2 = prompt('Second number:');
+            const operation = prompt('Operation (+, -, *, /):');
+            
+            if (num1 && num2 && operation) {
+                const n1 = parseFloat(num1);
+                const n2 = parseFloat(num2);
+                
+                if (!isNaN(n1) && !isNaN(n2)) {
+                    let result;
+                    switch(operation) {
+                        case '+': result = n1 + n2; break;
+                        case '-': result = n1 - n2; break;
+                        case '*': result = n1 * n2; break;
+                        case '/': result = n1 / n2; break;
+                        default: result = 'Invalid operation!';
+                    }
+                    showResult('assistant-result', `Result: ${n1} ${operation} ${n2} = ${result}`, 'success');
+                } else {
+                    showResult('assistant-result', '❌ Please enter valid numbers!', 'error');
+                }
+            }
+        }
+
+        function assistantWeather() {
+            const temp = prompt('What\'s the temperature?');
+            const temperature = parseInt(temp);
+            
+            if (!isNaN(temperature)) {
+                let advice;
+                if (temperature > 25) {
+                    advice = '☀️ Hot day! Stay hydrated and wear sunscreen!';
+                } else if (temperature > 15) {
+                    advice = '🌤️ Nice weather! Perfect for outdoor activities!';
+                } else {
+                    advice = '❄️ Cold day! Bundle up and stay warm!';
+                }
+                showResult('assistant-result', advice, 'success');
+            } else {
+                showResult('assistant-result', '❌ Please enter a valid temperature!', 'error');
+            }
+        }
+
+        function assistantGame() {
+            const secret = Math.floor(Math.random() * 20) + 1;
+            let attempts = 0;
+            
+            while (true) {
+                const guess = prompt('Your guess (1-20):');
+                attempts++;
+                
+                if (guess === null) break; // User cancelled
+                
+                const guessNum = parseInt(guess);
+                if (isNaN(guessNum)) {
+                    alert('❌ Please enter a valid number!');
+                    continue;
+                }
+                
+                if (guessNum === secret) {
+                    showResult('assistant-result', `🎉 Correct! You got it in ${attempts} attempts!`, 'success');
+                    break;
+                } else if (guessNum < secret) {
+                    alert('📈 Too low!');
+                } else {
+                    alert('📉 Too high!');
+                }
+            }
+        }
+
+        function assistantFavorites() {
+            let result = 'Your favorite things:<br>';
+            assistantData.favorites.forEach((item, index) => {
+                result += `${index + 1}. ${item}<br>`;
+            });
+            showResult('assistant-result', result, 'success');
+        }
+
+        function assistantExit() {
+            showResult('assistant-result', `👋 Goodbye ${assistantData.name}! Thanks for using your personal assistant!`, 'success');
+        }
+
+        function showResult(elementId, message, type) {
+            const element = document.getElementById(elementId);
+            element.innerHTML = message;
+            element.className = `result ${type}`;
+            element.style.display = 'block';
+        }
+
+        // Initialize the tool
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🎓 Interactive Python Learning Tool loaded successfully!');
+        });
+    </script>
+</body>
+</html> 
